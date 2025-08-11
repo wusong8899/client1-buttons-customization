@@ -1,0 +1,36 @@
+{
+    "name": "wusong8899/client1-buttons-customization",
+    "description": "A Flarum extension. Buttons customization.",
+    "type": "flarum-extension",
+    "license": "MIT",
+    "require": {
+        "flarum/core": "^1.0",
+        "wusong8899/client1-header-adv": "*"
+    },
+    "support": {
+        "issues": "https://github.com/wusong8899/flarum-daily-check-in/issues",
+        "source": "https://github.com/wusong8899/flarum-daily-check-in"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "wusong8899\\Client1ButtonsCustomization\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "wusong8899"
+        }
+    ],
+    "extra": {
+        "flarum-extension": {
+            "title": "wusong8899 Buttons Customization",
+            "icon": {
+                "name": "fas fa-tools",
+                "backgroundColor": "#68238c",
+                "color": "#fff"
+            }
+        }
+    }
+}

@@ -1,0 +1,18 @@
+client1-buttons-customization:
+  forum:
+    check-in: Check In
+  admin:
+    link-add: Add Link
+    confirm: Confirm
+    cancel: Cancel
+    save-error: Save Error
+    delete-error: Delete Error
+    settings:
+      item-id: ID
+      item-name: Name
+      item-url: URL
+      item-icon: Icon
+      item-add: Add Link
+      item-edit: Edit
+      item-delete: Delete
+      item-delete-confirmation: Are you sure to delete?
