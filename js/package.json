@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@wusong8899/flarum-daily-check-in",
+  "name": "@wusong8899/client1-buttons-customization",
   "devDependencies": {
     "@types/mithril": "^2.2.7",
     "@types/sortablejs": "^1.15.8",
