@@ -1,4 +1,4 @@
-import {extend, override} from 'flarum/extend';
+import app from 'flarum/admin/app';
 import SettingsPage from './components/SettingsPage';
 import ButtonsCustomization from "../forum/model/ButtonsCustomization";
 
