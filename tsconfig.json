@@ -5,8 +5,7 @@
         "../vendor/flarum/core/js/dist-typings/@types/**/*"
     ],
     "exclude": [
-        "../vendor/**/*",
-        "dist-typings"
+        "node_modules/**/*"
     ],
     "compilerOptions": {
         "declarationDir": "./dist-typings",
