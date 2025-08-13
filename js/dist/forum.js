@@ -1,2 +1,4 @@
 (function(i,t){"use strict";class o extends t{}Object.assign(o.prototype,{id:t.attribute("id"),name:t.attribute("name"),icon:t.attribute("icon"),color:t.attribute("color"),url:t.attribute("url"),sort:t.attribute("sort")}),i.initializers.add("client1-buttons-customization",()=>{i.store.models.buttonsCustomizationList=o})})(flarum.core.compat["forum/app"],flarum.core.compat["common/Model"]);
 //# sourceMappingURL=forum.js.map
+
+module.exports={};

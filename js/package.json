@@ -11,7 +11,8 @@
     "vite": "^7.1.2"
   },
   "scripts": {
-    "dev": "vite -c vite.config.admin.ts build --watch --mode development & vite -c vite.config.forum.ts build --watch --mode development",
+    "dev": "vite -c vite.config.admin.ts build --watch --mode development",
+    "dev:forum": "vite -c vite.config.forum.ts build --watch --mode development",
     "build": "vite -c vite.config.admin.ts build --mode production && vite -c vite.config.forum.ts build --mode production",
     "lint": "oxlint .",
     "lint:fix": "oxlint . --fix"

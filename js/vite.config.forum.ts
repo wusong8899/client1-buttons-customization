@@ -1,9 +1,26 @@
 import { defineConfig } from 'vite';
 import path from 'node:path';
 
+// Custom plugin to handle Flarum's module.exports assignment pattern
+function flarumModuleExports() {
+  return {
+    name: 'flarum-module-exports',
+    generateBundle(options: any, bundle: any) {
+      for (const fileName in bundle) {
+        const chunk = bundle[fileName];
+        if (chunk.type === 'chunk' && chunk.isEntry) {
+          // Add module.exports={} at the end like webpack does
+          chunk.code = chunk.code + '\nmodule.exports={};';
+        }
+      }
+    },
+  };
+}
+
 export default defineConfig({
   root: path.resolve(__dirname),
   publicDir: false,
+  plugins: [flarumModuleExports()],
   build: {
     outDir: 'dist',
     emptyOutDir: false,
