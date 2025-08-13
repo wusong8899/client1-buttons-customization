@@ -6,10 +6,8 @@ import ButtonsCustomization from '../../forum/model/ButtonsCustomization';
 import app from 'flarum/admin/app';
 
 import Sortable, { SortableEvent } from 'sortablejs';
+import m from 'mithril';
 import type Mithril from 'mithril';
-
-// Import Mithril from Flarum's compatibility layer
-const m = (window as any).flarum?.core?.compat?.mithril || (window as any).m;
 
 export default class SettingsPage extends ExtensionPage {
   loading!: boolean;
@@ -34,15 +32,23 @@ export default class SettingsPage extends ExtensionPage {
   }
 
   content(_vnode: Mithril.VnodeDOM): Mithril.Children {
-    return m('div', { className: 'ExtensionPage-settings FlarumBadgesPage' }, [
-      m('div', { className: 'container' }, [
-        m('div', { style: 'padding-bottom:10px' }, [
-          m(Button, {
+    // Ensure m is available, use fallback if needed
+    const mithril = m || (app as any).m || (window as any).m;
+
+    if (!mithril) {
+      console.error('Mithril is not available');
+      return 'Error: Mithril not loaded';
+    }
+
+    return mithril('div', { className: 'ExtensionPage-settings FlarumBadgesPage' }, [
+      mithril('div', { className: 'container' }, [
+        mithril('div', { style: 'padding-bottom:10px' }, [
+          mithril(Button, {
             className: 'Button',
             onclick: () => app.modal.show(ButtonsCustomizationAddModal)
           }, app.translator.trans('client1-buttons-customization.admin.link-add')),
         ]),
-        m(
+        mithril(
           'ul',
           {
             id: 'buttonsCustomizationSortableItems',
@@ -50,13 +56,13 @@ export default class SettingsPage extends ExtensionPage {
             oncreate: this.initSort.bind(this)
           },
           this.buttonsCustomizationList.map((ButtonsCustomizationItemData: ButtonsCustomization) =>
-            m(
+            mithril(
               'li',
               {
                 'data-item-id': ButtonsCustomizationItemData.id(),
                 style: 'margin-top:5px;background: var(--body-bg);'
               },
-              m(ButtonsCustomizationListItem, { ButtonsCustomizationItemData })
+              mithril(ButtonsCustomizationListItem, { ButtonsCustomizationItemData })
             )
           )
         ),
@@ -93,7 +99,12 @@ export default class SettingsPage extends ExtensionPage {
 
   parseResults(results: any): any {
     this.buttonsCustomizationList.push(...(results as ButtonsCustomization[]));
-    m.redraw();
+    // Use app.m if available, otherwise fall back to m
+    if (app && (app as any).m && (app as any).m.redraw) {
+      (app as any).m.redraw();
+    } else if (m && m.redraw) {
+      m.redraw();
+    }
     return results;
   }
 
