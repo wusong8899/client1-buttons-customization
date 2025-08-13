@@ -3,9 +3,7 @@ import Button from 'flarum/common/components/Button';
 import ButtonsCustomization from '../../forum/model/ButtonsCustomization';
 import app from 'flarum/admin/app';
 import type Mithril from 'mithril';
-
-// Import Mithril from Flarum's compatibility layer
-const m = (window as any).flarum?.core?.compat?.mithril || (window as any).m;
+import m from 'mithril';
 
 interface ButtonsCustomizationDeleteModalAttrs extends IInternalModalAttrs {
   ButtonsCustomizationItemData: ButtonsCustomization;

@@ -4,9 +4,7 @@ import ButtonsCustomizationAddModal from './ButtonsCustomizationAddModal';
 import ButtonsCustomizationDeleteModal from './ButtonsCustomizationDeleteModal';
 import ButtonsCustomization from '../../forum/model/ButtonsCustomization';
 import app from 'flarum/admin/app';
-
-// Import Mithril from Flarum's compatibility layer
-const m = (window as any).flarum?.core?.compat?.mithril || (window as any).m;
+import m from 'mithril';
 
 interface ButtonsCustomizationListItemAttrs {
   ButtonsCustomizationItemData: ButtonsCustomization;
