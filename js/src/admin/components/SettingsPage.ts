@@ -6,8 +6,10 @@ import ButtonsCustomization from '../../forum/model/ButtonsCustomization';
 import app from 'flarum/admin/app';
 
 import Sortable, { SortableEvent } from 'sortablejs';
-import m from 'mithril';
 import type Mithril from 'mithril';
+
+// Import Mithril from Flarum's compatibility layer
+const m = (window as any).flarum?.core?.compat?.mithril || (window as any).m;
 
 export default class SettingsPage extends ExtensionPage {
   loading!: boolean;
@@ -31,27 +33,35 @@ export default class SettingsPage extends ExtensionPage {
     }
   }
 
-  content(_vnode: Mithril.VnodeDOM): JSX.Element {
-    const out = m('div', { className: 'ExtensionPage-settings FlarumBadgesPage' }, [
+  content(_vnode: Mithril.VnodeDOM): Mithril.Children {
+    return m('div', { className: 'ExtensionPage-settings FlarumBadgesPage' }, [
       m('div', { className: 'container' }, [
         m('div', { style: 'padding-bottom:10px' }, [
-          m(Button, { className: 'Button', onclick: () => app.modal.show(ButtonsCustomizationAddModal) }, app.translator.trans('client1-buttons-customization.admin.link-add')),
+          m(Button, {
+            className: 'Button',
+            onclick: () => app.modal.show(ButtonsCustomizationAddModal)
+          }, app.translator.trans('client1-buttons-customization.admin.link-add')),
         ]),
         m(
           'ul',
-          { id: 'buttonsCustomizationSortableItems', style: 'padding:0px;list-style-type: none;', oncreate: this.initSort.bind(this) },
+          {
+            id: 'buttonsCustomizationSortableItems',
+            style: 'padding:0px;list-style-type: none;',
+            oncreate: this.initSort.bind(this)
+          },
           this.buttonsCustomizationList.map((ButtonsCustomizationItemData: ButtonsCustomization) =>
             m(
               'li',
-              { 'data-item-id': ButtonsCustomizationItemData.id(), style: 'margin-top:5px;background: var(--body-bg);' },
-              ButtonsCustomizationListItem.component({ ButtonsCustomizationItemData })
+              {
+                'data-item-id': ButtonsCustomizationItemData.id(),
+                style: 'margin-top:5px;background: var(--body-bg);'
+              },
+              m(ButtonsCustomizationListItem, { ButtonsCustomizationItemData })
             )
           )
         ),
       ]),
     ]);
-
-    return out as unknown as JSX.Element;
   }
 
   updateSort(e: SortableEvent): void {
