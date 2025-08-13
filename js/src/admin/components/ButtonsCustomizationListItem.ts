@@ -4,7 +4,7 @@ import ButtonsCustomizationAddModal from './ButtonsCustomizationAddModal';
 import ButtonsCustomizationDeleteModal from './ButtonsCustomizationDeleteModal';
 import ButtonsCustomization from '../../forum/model/ButtonsCustomization';
 import app from 'flarum/admin/app';
-import m from 'mithril';
+import type Mithril from 'mithril';
 
 interface ButtonsCustomizationListItemAttrs {
   ButtonsCustomizationItemData: ButtonsCustomization;
@@ -12,7 +12,14 @@ interface ButtonsCustomizationListItemAttrs {
 }
 
 export default class ButtonsCustomizationListItem extends Component<ButtonsCustomizationListItemAttrs> {
-  view(): m.Children {
+  view(): Mithril.Children {
+    // Ensure m is available, use fallback if needed
+    const m = (window as any).m || (app as any).m || (globalThis as any).m;
+
+    if (!m) {
+      return 'Error: Mithril not loaded';
+    }
+
     const { ButtonsCustomizationItemData } = this.attrs;
     const buttonsCustomizationID = ButtonsCustomizationItemData.id();
     const buttonsCustomizationName = ButtonsCustomizationItemData.name();

@@ -4,7 +4,6 @@ import Stream from 'flarum/common/utils/Stream';
 import ButtonsCustomization from '../../forum/model/ButtonsCustomization';
 import app from 'flarum/admin/app';
 import type Mithril from 'mithril';
-import m from 'mithril';
 
 interface ButtonsCustomizationAddModalAttrs extends IInternalModalAttrs {
   ButtonsCustomizationItemData?: ButtonsCustomization;
@@ -53,6 +52,13 @@ export default class ButtonsCustomizationAddModal extends Modal<ButtonsCustomiza
   }
 
   content(): Mithril.Children {
+    // Ensure m is available, use fallback if needed
+    const m = (window as any).m || (app as any).m || (globalThis as any).m;
+
+    if (!m) {
+      return 'Error: Mithril not loaded';
+    }
+
     return m('div', { className: 'Modal-body' }, [
       m('div', { className: 'Form' }, [
         m('div', { className: 'Form-group', style: 'text-align: center;' }, [
