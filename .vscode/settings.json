@@ -1,3 +1,5 @@
 {
+    "javascript.validate.enable": false,
+    "typescript.validate.enable": false,
     "oxc.enable": true
 }

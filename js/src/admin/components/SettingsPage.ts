@@ -31,7 +31,7 @@ export default class SettingsPage extends ExtensionPage {
     }
   }
 
-  content(vnode: Mithril.VnodeDOM): JSX.Element {
+  content(_vnode: Mithril.VnodeDOM): JSX.Element {
     const out = m('div', { className: 'ExtensionPage-settings FlarumBadgesPage' }, [
       m('div', { className: 'container' }, [
         m('div', { style: 'padding-bottom:10px' }, [
