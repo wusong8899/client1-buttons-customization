@@ -36,7 +36,6 @@ export default class SettingsPage extends ExtensionPage {
     const mithril = m || (app as any).m || (window as any).m;
 
     if (!mithril) {
-      console.error('Mithril is not available');
       return 'Error: Mithril not loaded';
     }
 
@@ -45,7 +44,9 @@ export default class SettingsPage extends ExtensionPage {
         mithril('div', { style: 'padding-bottom:10px' }, [
           mithril(Button, {
             className: 'Button',
-            onclick: () => app.modal.show(ButtonsCustomizationAddModal)
+            onclick: () => app.modal.show(ButtonsCustomizationAddModal, {
+              onSave: () => this.refreshData()
+            })
           }, app.translator.trans('client1-buttons-customization.admin.link-add')),
         ]),
         mithril(
@@ -62,7 +63,10 @@ export default class SettingsPage extends ExtensionPage {
                 'data-item-id': ButtonsCustomizationItemData.id(),
                 style: 'margin-top:5px;background: var(--body-bg);'
               },
-              mithril(ButtonsCustomizationListItem, { ButtonsCustomizationItemData })
+              mithril(ButtonsCustomizationListItem, {
+                ButtonsCustomizationItemData,
+                onSave: () => this.refreshData()
+              })
             )
           )
         ),
@@ -113,5 +117,23 @@ export default class SettingsPage extends ExtensionPage {
       .find("buttonsCustomizationList")
       .catch(() => [])
       .then(this.parseResults.bind(this));
+  }
+
+  refreshData(): void {
+    // Clear the current list
+    this.buttonsCustomizationList = [];
+
+    // Clear the store cache to force fresh data
+    app.store.data.buttonsCustomizationList = {};
+
+    // Reload the data
+    this.loadResults().then(() => {
+      // Force a redraw
+      if (app && (app as any).m && (app as any).m.redraw) {
+        (app as any).m.redraw();
+      } else if (m && m.redraw) {
+        m.redraw();
+      }
+    });
   }
 }

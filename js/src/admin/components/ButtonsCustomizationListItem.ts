@@ -8,6 +8,7 @@ import m from 'mithril';
 
 interface ButtonsCustomizationListItemAttrs {
   ButtonsCustomizationItemData: ButtonsCustomization;
+  onSave?: () => void;
 }
 
 export default class ButtonsCustomizationListItem extends Component<ButtonsCustomizationListItemAttrs> {
@@ -46,7 +47,10 @@ export default class ButtonsCustomizationListItem extends Component<ButtonsCusto
   }
 
   editItem(ButtonsCustomizationItemData: ButtonsCustomization): void {
-    app.modal.show(ButtonsCustomizationAddModal, { ButtonsCustomizationItemData });
+    app.modal.show(ButtonsCustomizationAddModal, {
+      ButtonsCustomizationItemData,
+      onSave: this.attrs.onSave
+    });
   }
 
   deleteItem(ButtonsCustomizationItemData: ButtonsCustomization): void {

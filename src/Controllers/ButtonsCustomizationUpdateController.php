@@ -5,14 +5,14 @@ namespace wusong8899\Client1ButtonsCustomization\Controllers;
 use wusong8899\Client1ButtonsCustomization\Serializer\ButtonsCustomizationSerializer;
 use wusong8899\Client1ButtonsCustomization\Model\ButtonsCustomization;
 
-use Flarum\Api\Controller\AbstractCreateController;
+use Flarum\Api\Controller\AbstractShowController;
 use Flarum\Foundation\ValidationException;
 use Flarum\Locale\Translator;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 use Illuminate\Support\Arr;
 
-class ButtonsCustomizationUpdateController extends AbstractCreateController
+class ButtonsCustomizationUpdateController extends AbstractShowController
 {
     public $serializer = ButtonsCustomizationSerializer::class;
     protected $translator;
@@ -26,39 +26,39 @@ class ButtonsCustomizationUpdateController extends AbstractCreateController
     {
         $actor = $request->getAttribute('actor');
         $actor->assertAdmin();
+
+        // Get ID from route parameters (standard for PATCH requests)
         $buttonsCustomizationID = Arr::get($request->getQueryParams(), 'id');
 
-        if (!isset($buttonsCustomizationID)) {
-            $errorMessage = 'client1-buttons-customization.admin.save-error';
-        } else {
-            $buttonsCustomizationSaveData = Arr::get($request->getParsedBody(), 'data', null);
-            $errorMessage = "";
-            $buttonsCustomizationData = ButtonsCustomization::find($buttonsCustomizationID);
-
-            if (!isset($buttonsCustomizationData)) {
-                $errorMessage = 'client1-buttons-customization.admin.save-error';
-            } else {
-                if (Arr::has($buttonsCustomizationSaveData, "attributes.name")) {
-                    $buttonsCustomizationData->name = Arr::get($buttonsCustomizationSaveData, "attributes.name", null);
-                }
-                if (Arr::has($buttonsCustomizationSaveData, "attributes.url")) {
-                    $buttonsCustomizationData->url = Arr::get($buttonsCustomizationSaveData, "attributes.url", null);
-                }
-                if (Arr::has($buttonsCustomizationSaveData, "attributes.icon")) {
-                    $buttonsCustomizationData->icon = Arr::get($buttonsCustomizationSaveData, "attributes.icon", null);
-                }
-                if (Arr::has($buttonsCustomizationSaveData, "attributes.color")) {
-                    $buttonsCustomizationData->color = Arr::get($buttonsCustomizationSaveData, "attributes.color", null);
-                }
-
-                $buttonsCustomizationData->save();
-
-                return $buttonsCustomizationData;
-            }
+        if (!$buttonsCustomizationID) {
+            throw new ValidationException(['message' => $this->translator->trans('client1-buttons-customization.admin.save-error')]);
         }
 
-        if ($errorMessage !== "") {
-            throw new ValidationException(['message' => $this->translator->trans($errorMessage)]);
+        $buttonsCustomizationData = ButtonsCustomization::find($buttonsCustomizationID);
+
+        if (!$buttonsCustomizationData) {
+            throw new ValidationException(['message' => $this->translator->trans('client1-buttons-customization.admin.save-error')]);
         }
+
+        // Get the request data from the standard JSON:API structure
+        $requestData = Arr::get($request->getParsedBody(), 'data.attributes', []);
+
+        // Update only the provided attributes
+        if (array_key_exists('name', $requestData)) {
+            $buttonsCustomizationData->name = $requestData['name'];
+        }
+        if (array_key_exists('url', $requestData)) {
+            $buttonsCustomizationData->url = $requestData['url'];
+        }
+        if (array_key_exists('icon', $requestData)) {
+            $buttonsCustomizationData->icon = $requestData['icon'];
+        }
+        if (array_key_exists('color', $requestData)) {
+            $buttonsCustomizationData->color = $requestData['color'];
+        }
+
+        $buttonsCustomizationData->save();
+
+        return $buttonsCustomizationData;
     }
 }

@@ -8,6 +8,7 @@ import m from 'mithril';
 
 interface ButtonsCustomizationAddModalAttrs extends IInternalModalAttrs {
   ButtonsCustomizationItemData?: ButtonsCustomization;
+  onSave?: () => void;
 }
 
 export default class ButtonsCustomizationAddModal extends Modal<ButtonsCustomizationAddModalAttrs> {
@@ -108,7 +109,14 @@ export default class ButtonsCustomizationAddModal extends Modal<ButtonsCustomiza
         icon: this.itemIcon(),
         color: this.itemColor(),
       })
-        .then(() => this.hide())
+        .then(() => {
+          // Call the onSave callback to refresh parent component
+          if (this.attrs.onSave) {
+            this.attrs.onSave();
+          }
+
+          this.hide();
+        })
         .catch((response) => {
           this.loading = false;
           this.handleErrors(response);
@@ -123,7 +131,12 @@ export default class ButtonsCustomizationAddModal extends Modal<ButtonsCustomiza
           color: this.itemColor(),
         })
         .then(() => {
-          location.reload();
+          // Call the onSave callback to refresh parent component
+          if (this.attrs.onSave) {
+            this.attrs.onSave();
+          }
+
+          this.hide();
         })
         .catch((error) => {
           this.loading = false;
@@ -132,9 +145,8 @@ export default class ButtonsCustomizationAddModal extends Modal<ButtonsCustomiza
     }
   }
 
-  handleErrors(error: any): void {
+  handleErrors(_error: any): void {
     // Fallback error handling: show a generic alert using our translations
-    console.error('ButtonsCustomizationAddModal error', error);
     app.alerts.show({ type: 'error' }, app.translator.trans('client1-buttons-customization.admin.save-error'));
   }
 }
