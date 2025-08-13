@@ -2,8 +2,10 @@ import Modal, { IInternalModalAttrs } from 'flarum/common/components/Modal';
 import Button from 'flarum/common/components/Button';
 import ButtonsCustomization from '../../forum/model/ButtonsCustomization';
 import app from 'flarum/admin/app';
-import m from 'mithril';
 import type Mithril from 'mithril';
+
+// Import Mithril from Flarum's compatibility layer
+const m = (window as any).flarum?.core?.compat?.mithril || (window as any).m;
 
 interface ButtonsCustomizationDeleteModalAttrs extends IInternalModalAttrs {
   ButtonsCustomizationItemData: ButtonsCustomization;
